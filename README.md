@@ -16,9 +16,7 @@ sample python app that shows you how to connect to a PostgreSQL database deploye
    
     ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql/#installing-the-chart
     ```
-    helm install pg-test-release \
-  --set postgresqlPassword=secretpassword,postgresqlDatabase=testdb \
-    bitnami/postgresql
+    helm install pg-test-release --set postgresqlPassword=secretpassword,postgresqlDatabase=testdb bitnami/postgresql
     ```
 
 4. Create kubernetes secrets to store databse credential which can be used by the sample app.
