@@ -75,3 +75,8 @@ The app uses a PUT and a GET operation:
 - GET
   - uses `client.query` method to retrieve the contents of the _words_ table
   - returns the response of the database command to [main.js](public/javascript/main.js)
+
+
+## Credits
+
+https://github.com/IBM-Cloud
