@@ -8,13 +8,23 @@ sample python app that shows you how to connect to a PostgreSQL database deploye
 
 2. Setup Kubectl in you local host
 
-    The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
+    ```
+    https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+    ```
 
 3. Deploy postgresql using Helm charts
-
+   
+    ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql/#installing-the-chart
+    ```
+    helm install pg-test-release \
+  --set postgresqlPassword=secretpassword,postgresqlDatabase=testdb \
+    bitnami/postgresql
+    ```
 
 4. Create kubernetes secrets to store databse credential which can be used by the sample app.
-
+   ```
+   kubectl create -f pg-secret.yaml
+   ```
 
 5. clone the python-helloworld-postgresql
    
@@ -34,14 +44,22 @@ sample python app that shows you how to connect to a PostgreSQL database deploye
 
     Under the following, change the `image` name with the repository name that you got from the previous step:
 
-    Now, under `secretKeyRef`, change the name of `<postgres-secret-name>` to match the name of the secret that was created before for PostgreSQL to your Kubernetes cluster.
+    Now, under `secretRef`, change the name of `<postgres-secret-name>` to match the name of the secret that was created before for PostgreSQL to your Kubernetes cluster.
 
 ```yaml
-    secretKeyRef:
-    name: <postgres-secret-name> # Edit me
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pg-test-secret
+type: Opaque
+data:
+  DB_USERNAME: cG9zdGdyZXM=
+  DB_PASSWORD: c2VjcmV0cGFzc3dvcmQ=
+  DB_HOST: cGctdGVzdC1yZWxlYXNlLXBvc3RncmVzcWwuZGVmYXVsdC5zdmMuY2x1c3Rlci5sb2NhbA==
+  DB_NAME: dGVzdGRi # Edit me
 ```
 
-    As for the `service` configuration at the bottom of the file, [`nodePort`][nodePort_information] indicates the port that the application can be accessed from. You have a range from 30000 - 32767 that you can use, but we've chosen 30081. As for the TCP port, it's set to 8080, which is the port that the Python application runs on in the container.
+    As for the `service` LoadBalancer type is used. Nodeport service also can be used. But I chose to use LoadBalancer.
 
 8. Deploy the application to kubernetes cluster
 
@@ -55,9 +73,7 @@ sample python app that shows you how to connect to a PostgreSQL database deploye
     kubectl get svc
 ```
 
-    Now you can access the application from the Public IP on port 30081.
-
-    The clouddatabases-postgresql-helloworld app displays the contents of an _examples_ database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
+    From the output LoadBalancer External IP can be obtained.
 
 ## Code Structure
 
