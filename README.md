@@ -12,20 +12,25 @@ sample python app that shows you how to connect to a PostgreSQL database deploye
     export AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
 ```
 
-3. Setup Kubectl in you local host
+3. Set EKS context
+   ```
+   aws eks --region <region> update-kubeconfig --name <cluster-name>
+   ```
+4. Setup Kubectl in you local host
 
     ```
     https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
     ```
 
-4. Deploy postgresql using Helm charts
+
+5. Deploy postgresql using Helm charts
    
     ref: https://github.com/bitnami/charts/tree/master/bitnami/postgresql/#installing-the-chart
     ```
     helm install pg-test-release --set postgresqlPassword=secretpassword,postgresqlDatabase=testdb bitnami/postgresql
     ```
 
-5. Create kubernetes secrets to store databse credential which can be used by the sample app.
+6. Create kubernetes secrets to store databse credential which can be used by the sample app.
    Make sure to encode the secret and then use it in your yaml file
    ie:
     ```
@@ -36,7 +41,7 @@ sample python app that shows you how to connect to a PostgreSQL database deploye
    kubectl create -f pg-secret.yaml
    ```
 
-6. clone the python-helloworld-postgresql
+7. clone the python-helloworld-postgresql
    
 ```
     git clone git@github.com:sharonsahadevan/python-helloworld-postgresql.git
