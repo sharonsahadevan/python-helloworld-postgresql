@@ -1,37 +1,37 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: icdpostgres-app
+  name: py-postgres-app
 spec:
-  replicas: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: py-postgres-app-demo
   template:
     metadata:
-      name: icdpostgres-app
+      name: py-postgres-app
       labels:
-        run: clouddb-demo
+        app: py-postgres-app-demo
     spec:
       containers:
-      - name: cloudpostgres-python-app
-        image: "<region>.icr.io/<namespace>/icdpg" # Edit me
+      - name: py-postgres-app-demo
+        image: "sharon92/sample-hello-world:4.0"
         imagePullPolicy: Always
-        env:
-        - name: BINDING
-          valueFrom:
-            secretKeyRef:
-              name: <postgres-secret-name> # Edit me
-              key: binding
+        envFrom:
+        - secretRef:
+              name: pg-test-secret           
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloudpostgres-service
+  name: py-postgres-service
   labels:
-    run: clouddb-demo
+    run: py-postgres-app-demo
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
-    run: clouddb-demo
+    app: py-postgres-app-demo
   ports:
   - protocol: TCP
-    port: 8080
-    nodePort: 30081
+    port: 80
+    targetPort: 80

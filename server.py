@@ -8,25 +8,20 @@ from flask import request
 
 import psycopg2
 
-app = Flask(__name__)
-port = int(os.getenv('PORT', 8080))
+app         = Flask(__name__)
+port        = int(os.getenv('PORT', 80))
+db_port     = int(os.getenv('DB_PORT', 5432))
+db_username = os.getenv('DB_USERNAME')
+db_password = os.getenv('DB_PASSWORD')
+db_name     = os.getenv('DB_NAME')
+db_host     = os.getenv('DB_HOST')
 
-if 'BINDING' in os.environ:
-    credentials = json.loads(os.environ['BINDING'])
-    postgresql_conn = credentials['connection']['postgres']
-    connection_string = postgresql_conn['composed'][0]
-    print(credentials)
-
-parsed = urlparse(connection_string)
-    
 conn = psycopg2.connect(
-    host=parsed.hostname,
-    port=parsed.port,
-    user=parsed.username,
-    password=parsed.password,
-    #sslmode='verify-full',
-    #sslrootcert='/etc/ssl/certs/ca-certificates.crt',
-    database='ibmclouddb')
+    host=db_host,
+    port=db_port,
+    user=db_username,
+    password=db_password,
+    database=db_name)
 
 @app.route('/')
 # top-level page display, creates table if it doesn't exist
