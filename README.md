@@ -19,7 +19,7 @@ sample python app that shows you how to connect to a PostgreSQL database deploye
 5. clone the python-helloworld-postgresql
    
 ```
-    git clone -b python git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
+    git clone git@github.com:sharonsahadevan/python-helloworld-postgresql.git
 ```
 
 6. `cd` into this newly created directory, and `cd` into the `postgresql` folder. The code for connecting to the service, and reading from and updating the database can be found in `server.py`. There's also a `public` directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image to docker hub.
